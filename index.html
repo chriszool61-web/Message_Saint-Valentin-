@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Generator Luxe 💖</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon doré -->
+<style>
+html, body {
+    margin:0; padding:0;
+    width:100%; height:100%;
+    font-family:'Poppins', sans-serif;
+    background:#111; 
+    color:white;
+    overflow:hidden;
+    display:flex; flex-direction:column; align-items:center;
+}
+
+/* Gros cœur pulsant */
+#bigHeart {
+    font-size:200px;
+    position:absolute;
+    top:30%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(1);
+    opacity:0.12;
+    color:gold;
+    z-index:0;
+    transition:transform 0.1s ease-in-out;
+}
+
+/* Carte carrée du message */
+#messageCard {
+    margin-top:50px;
+    padding:20px;
+    background: rgba(255,255,255,0.05);
+    color:gold;
+    font-size:20px;
+    border-radius:20px;
+    box-shadow:0 8px 25px rgba(255,215,0,0.3);
+    width:90%;
+    max-width:350px;
+    height:350px;
+    text-align:center;
+    z-index:1;
+    line-height:1.6;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    word-wrap: break-word;
+}
+
+/* Inputs & boutons */
+input {
+    padding:12px;
+    border-radius:25px;
+    border:2px solid gold;
+    background:#111;
+    color:white;
+    width:85%;
+    font-size:18px;
+    margin:10px 0;
+    outline:none;
+}
+input::placeholder { color:#ccc; }
+
+button {
+    padding:12px 25px;
+    border-radius:25px;
+    border:2px solid gold;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:17px;
+    margin:6px 2px;
+    background:#111;
+    color:gold;
+    transition:0.3s;
+}
+button:hover { background:gold; color:#111; }
+
+/* Cœurs et fleurs */
+.heart, .flower {
+    position:absolute;
+    font-size:20px;
+    animation:fall 5s linear forwards;
+    opacity:0.8;
+}
+@keyframes fall{
+    0%{ transform: translateY(-10vh) rotate(0deg); opacity:1; }
+    80%{ opacity:1; }
+    100%{ transform: translateY(110vh) rotate(360deg); opacity:0; }
+}
+
+/* Famille en bas */
+#family {
+    position:absolute;
+    bottom:60px;
+    display:flex;
+    justify-content:center;
+    width:100%;
+}
+.familyPerson {
+    font-size:40px;
+    margin:0 5px;
+    animation:bounce 1.2s infinite;
+}
+@keyframes bounce{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-10px); }
+}
+
+/* Footer – signature ultra visible */
+.footer{
+    position:absolute;
+    bottom:10px;
+    font-size:28px; /* grande taille */
+    color:gold;
+    width:100%;
+    text-align:center;
+    letter-spacing:2px;
+    font-weight:bold;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
+
+/* Compteur dynamique */
+#counter{
+    margin-top:10px;
+    font-size:16px;
+    color:#fff;
+    text-shadow:0 1px 3px rgba(0,0,0,0.4);
+}
+</style>
+</head>
+<body>
+
+<div id="bigHeart">❤️</div>
+
+<div class="container" style="z-index:1; width:100%; display:flex; flex-direction:column; align-items:center;">
+    <h1 style="color:gold; text-shadow:0 2px 5px rgba(0,0,0,0.5); font-size:24px;">💖 Générateur d'Amour Luxe 💖</h1>
+    <input type="text" id="name" placeholder="Prénom de ton amour">
+    <button id="generateBtn" onclick="generateLove()">Générer 💌</button>
+    <button id="whatsappBtn" onclick="shareWhatsApp()">Partager WhatsApp</button>
+    <div id="messageCard"></div>
+    <div id="counter">💌 Déjà 0 personnes ont généré un message !</div>
+</div>
+
+<div id="family">
+    <div class="familyPerson">👩‍❤️‍👨</div>
+    <div class="familyPerson">👦</div>
+</div>
+
+<div class="footer">Créé par ChrisZool</div>
+
+<!-- Musique déjà hébergée -->
+<audio id="music" loop src="https://www.bensound.com/bensound-music/bensound-love.mp3"></audio>
+
+<script>
+let lastMessage = "";
+let heartsInterval, flowersInterval;
+let fakeCount = 0;
+
+/* Génération message long unique */
+function generateLove(){
+    let name = document.getElementById("name").value.trim();
+    if(!name){ alert("Entre un prénom ❤️"); return; }
+    name = name.charAt(0).toUpperCase()+name.slice(1).toLowerCase();
+
+    const intro = ["Aujourd'hui, je veux te dire,", "En ce jour spécial, je pense à toi,", "Mon cœur me souffle que,"];
+    const compliments = ["tu es la lumière de mes jours,", "ta beauté illumine chaque instant,", "mon cœur bat seulement pour toi,", "tu es mon trésor le plus précieux,"];
+    const promesses = ["je te promets amour et fidélité pour toujours,", "je serai toujours à tes côtés main dans la main,", "je t’aimerai jusqu’à l’infini et au-delà,", "tu es mon étoile dans la nuit la plus sombre,"];
+    const conclusion = ["je t’aime plus que tout 💖🌹", "tu es mon bonheur éternel 💖🌹", "avec toi, la vie est magique 💖🌹"];
+
+    lastMessage = `${intro[Math.floor(Math.random()*intro.length)]} ${name}, ${compliments[Math.floor(Math.random()*compliments.length)]} ${promesses[Math.floor(Math.random()*promesses.length)]} ${conclusion[Math.floor(Math.random()*conclusion.length)]}`;
+    document.getElementById("messageCard").innerHTML = lastMessage;
+
+    // Compteur viral automatique
+    fakeCount += Math.floor(Math.random()*3 + 1);
+    document.getElementById("counter").innerText = `💌 Déjà ${fakeCount} personnes ont généré un message !`;
+
+    // Musique et animations
+    const music = document.getElementById("music");
+    music.play();
+
+    startHearts(); startFlowers(); animateHeartOnBeat(music);
+}
+
+/* Cœurs tombants */
+function startHearts(){
+    heartsInterval = setInterval(()=>{
+        let heart = document.createElement("div");
+        heart.className="heart";
+        heart.innerHTML="💖";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.fontSize=(14+Math.random()*20)+"px";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),5000);
+    },250);
+}
+
+/* Fleurs tombantes */
+function startFlowers(){
+    flowersInterval = setInterval(()=>{
+        let flower = document.createElement("div");
+        flower.className="flower";
+        flower.innerHTML="🌹";
+        flower.style.left=Math.random()*100+"vw";
+        document.body.appendChild(flower);
+        setTimeout(()=>flower.remove(),6000);
+    },350);
+}
+
+/* Gros cœur qui pulse sur la musique */
+function animateHeartOnBeat(audio){
+    const bigHeart = document.getElementById("bigHeart");
+    function pulse(){
+        if(!audio.paused){
+            const vol = Math.random()*0.1 + 1;
+            bigHeart.style.transform = `translate(-50%,-50%) scale(${vol})`;
+        }
+        requestAnimationFrame(pulse);
+    }
+    pulse();
+}
+
+/* Partage WhatsApp */
+function shareWhatsApp(){
+    if(!lastMessage){ alert("Génère d'abord un message 💌"); return; }
+    let url = "https://wa.me/?text=" + encodeURIComponent(lastMessage + " 💖 Essaie ce générateur !");
+    window.open(url,"_blank");
+}
+
+/* Compteur viral toutes les 4 sec */
+setInterval(()=>{
+    fakeCount += Math.floor(Math.random()*3 + 1);
+    document.getElementById("counter").innerText = `💌 Déjà ${fakeCount} personnes ont généré un message !`;
+}, 4000);
+
+</script>
+</body>
+</html>
